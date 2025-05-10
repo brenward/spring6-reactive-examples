@@ -75,4 +75,26 @@ class PersonRepositoryImplTest {
            });
         });
     }
+
+    @Test
+    void testFilterOnName(){
+        personRepository.findAll()
+                .filter(person ->
+                    person.getFirstName().equals("Joseph")
+                ).subscribe(
+                    person -> System.out.println(person.getLastName())
+                );
+    }
+
+    @Test
+    void testGetById(){
+        Mono<Person> sarahMono = personRepository.findAll()
+                .filter(person ->
+                        person.getFirstName().equals("Sarah")
+                ).next();
+
+        sarahMono.subscribe(person -> {
+            System.out.println(person.toString());
+        });
+    }
 }
