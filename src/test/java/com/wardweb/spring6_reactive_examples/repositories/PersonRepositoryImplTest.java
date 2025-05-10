@@ -97,4 +97,26 @@ class PersonRepositoryImplTest {
             System.out.println(person.toString());
         });
     }
+
+    @Test
+    void testFindPersonByIdNotFound(){
+        Flux<Person> personFlux = personRepository.findAll();
+
+        final Integer id = 9;
+
+        Mono<Person> personMono = personFlux
+                .filter(person ->
+                        person.getId().equals(id))
+                .single().doOnError(throwable -> {
+                    System.out.println("Person not found in flux");
+                    System.out.println(throwable.getMessage());
+                });
+
+        personMono.subscribe(person -> {
+            System.out.println(person.toString());
+        }, throwable -> {
+            System.out.println("Person not found");
+            System.out.println(throwable.getMessage());
+        });
+    }
 }
