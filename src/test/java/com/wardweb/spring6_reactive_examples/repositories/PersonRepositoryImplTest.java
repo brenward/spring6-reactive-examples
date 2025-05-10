@@ -119,4 +119,18 @@ class PersonRepositoryImplTest {
             System.out.println(throwable.getMessage());
         });
     }
+
+    @Test
+    void testFindById_NotFound(){
+        Mono<Person> personMono = personRepository.getById(9);
+
+        assertFalse(personMono.hasElement().block());
+    }
+
+    @Test
+    void testFindyId_Found() {
+        Mono<Person> personMono = personRepository.getById(2);
+
+        assertTrue(personMono.hasElement().block());
+    }
 }
