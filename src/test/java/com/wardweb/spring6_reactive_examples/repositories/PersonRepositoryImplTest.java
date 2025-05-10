@@ -4,6 +4,7 @@ import com.wardweb.spring6_reactive_examples.domain.Person;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 
@@ -132,5 +133,27 @@ class PersonRepositoryImplTest {
         Mono<Person> personMono = personRepository.getById(2);
 
         assertTrue(personMono.hasElement().block());
+    }
+
+    @Test
+    void testFindyId_FoundStepVerifier() {
+        Mono<Person> personMono = personRepository.getById(2);
+
+        StepVerifier.create(personMono).expectNextCount(1).verifyComplete();
+
+        personMono.subscribe(person -> {
+           System.out.println(person.toString());
+        });
+    }
+
+    @Test
+    void testFindyId_NotFoundStepVerifier() {
+        Mono<Person> personMono = personRepository.getById(9);
+
+        StepVerifier.create(personMono).expectNextCount(0).verifyComplete();
+
+        personMono.subscribe(person -> {
+            System.out.println(person.toString());
+        });
     }
 }
